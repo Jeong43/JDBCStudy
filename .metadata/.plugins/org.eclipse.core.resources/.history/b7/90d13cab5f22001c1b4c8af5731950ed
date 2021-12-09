@@ -1,0 +1,539 @@
+package com.test;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import com.util.DBConn;
+
+public class MemberDAO
+{
+	private Connection conn;
+	
+	
+	// 데이터베이스 연결 메소드
+	public Connection connection()
+	{
+		conn = DBConn.getConnection();
+		return conn;
+	}
+	
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	// 직원 전체 인원 수 확인
+	public int count()
+	{
+		int result = 0;
+		
+		try
+		{
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT COUNT(*) AS COUNT FROM TBL_EMP";
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next())
+				result = rs.getInt("COUNT");
+			
+			rs.close();
+			//stmt.close();
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+				
+		return result;
+	}
+	
+	
+	// 해당 직위 기본급 확인 : 직위id
+	public int minBasicPay(int id)
+	{
+		int result = 0;
+		
+		try
+		{
+			Statement stmt = conn.createStatement();
+			String sql = String.format("SELECT MIN_BASICPAY FROM TBL_JIKWI WHERE JIKWI_ID = %d", id);
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while (rs.next())
+				result = rs.getInt("MIN_BASICPAY");
+				
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}
+	
+	
+	// 해당 직위 기본급 확인 : 직위명
+	public int minBasicPay(String name)
+	{
+		int result = 0;
+		
+		try
+		{
+			Statement stmt = conn.createStatement();
+			String sql = String.format("SELECT MIN_BASICPAY FROM TBL_JIKWI WHERE JIKWI_NAME = '%s'", name);
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while (rs.next())
+				result = rs.getInt("MIN_BASICPAY");
+			
+			rs.close();
+			//stmt.close();
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}
+
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	public int cityId(String name)
+	{
+		int result = -1;
+		
+		try
+		{
+			Statement stmt = conn.createStatement();
+			String sql = String.format("SELECT CITY_ID FROM TBL_CITY WHERE CITY_NAME = '%s'", name);
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while (rs.next())
+				result = rs.getInt("CITY_ID");
+			
+			rs.close();
+			//stmt.close();
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}
+	
+	
+	public int buseoId(String name)
+	{
+		int result = -1;
+		
+		try
+		{
+			Statement stmt = conn.createStatement();
+			String sql = String.format("SELECT BUSEO_ID FROM TBL_BUSEO WHERE BUSEO_NAME = '%s'", name);
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while (rs.next())
+				result = rs.getInt("BUSEO_ID");
+			
+			rs.close();
+			//stmt.close();
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}
+	
+	
+	public int jikwiId(String name)
+	{
+		int result = -1;
+		
+		try
+		{
+			Statement stmt = conn.createStatement();
+			String sql = String.format("SELECT JIKWI_ID FROM TBL_JIKWI WHERE JIKWI_NAME = '%s'", name);
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while (rs.next())
+				result = rs.getInt("JIKWI_ID");
+			
+			rs.close();
+			//stmt.close();
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}
+	
+	
+	public String cityName(int id)
+	{
+		String result = "";
+		
+		try
+		{
+			Statement stmt = conn.createStatement();
+			String sql = String.format("SELECT CITY_NAME FROM TBL_CITY WHERE CITY_ID = %d", id);
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while (rs.next())
+				result = rs.getString("CITY_NAME");
+			
+			rs.close();
+			//stmt.close();
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}		
+		
+		return result;
+	}
+	
+	
+	public String buseoName(int id)
+	{
+		String result = "";
+		
+		try
+		{
+			Statement stmt = conn.createStatement();
+			String sql = String.format("SELECT BUSEO_NAME FROM TBL_BUSEO WHERE BUSEO_ID = %d", id);
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while (rs.next())
+				result = rs.getString("BUSEO_NAME");
+			
+			rs.close();
+			//stmt.close();
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}		
+		
+		return result;
+	}
+	
+	
+	public String jikwiName(int id)
+	{
+		String result = "";
+		
+		try
+		{
+			Statement stmt = conn.createStatement();
+			String sql = String.format("SELECT JIKWI_NAME FROM TBL_JIKWI WHERE JIKWI_ID = %d", id);
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while (rs.next())
+				result = rs.getString("JIKWI_NAME");
+			
+			rs.close();
+			//stmt.close();
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}		
+		
+		return result;
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	// 도시 리스트 출력 메소드
+	public ArrayList<String> cityLists()
+	{
+		ArrayList<String> result = new ArrayList<String>();
+		
+		try
+		{
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT CITY_NAME FROM TBL_CITY ORDER BY CITY_ID";
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while (rs.next())
+				result.add(rs.getString("CITY_NAME"));
+			
+			rs.close();
+			//stmt.close();
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}
+	
+	
+	// 부서 리스트 출력 메소드
+	public ArrayList<String> buseoLists()
+	{
+		ArrayList<String> result = new ArrayList<String>();
+		
+		try
+		{
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT BUSEO_NAME FROM TBL_BUSEO ORDER BY BUSEO_ID";
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while (rs.next())
+				result.add(rs.getString("BUSEO_NAME"));
+			
+			rs.close();
+			//stmt.close();
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}
+	
+	
+	// 직위 리스트 출력 메소드
+	public ArrayList<String> jikwiLists()
+	{
+		ArrayList<String> result = new ArrayList<String>();
+		
+		try
+		{
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT JIKWI_NAME FROM TBL_JIKWI ORDER BY JIKWI_ID";
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while (rs.next())
+				result.add(rs.getString("JIKWI_NAME"));
+			
+			rs.close();
+			//stmt.close();
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}
+	
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	// 직원정보 입력 메소드
+	public int add(MemberDTO dto)
+	{
+		int result = 0;
+		
+		try
+		{
+			Statement stmt = conn.createStatement();
+			String sql = String.format("INSERT INTO TBL_EMP"
+					+ " (EMP_ID, EMP_NAME, SSN, IBSADATE, CITY_ID, TEL, BUSEO_ID, JIKWI_ID, BASICPAY, SUDANG)"
+					+ " VALUES (EMPSEQ.NEXTVAL, '%s', '%s', '%s'"
+					+ ", %d, '%s', %d, %d, %d , %d)"
+					, dto.getEmpName(), dto.getSsn(), dto.getIbsadate()
+					, dto.getCityId(), dto.getTel(), dto.getBuseoId(), dto.getJikwiId()
+					, dto.getBasicPay(), dto.getSudang());
+			result = stmt.executeUpdate(sql);
+			//stmt.close();
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}
+	
+	
+	// 직원 전체 출력
+	public ArrayList<MemberDTO> lists(int n) 
+	{
+		ArrayList<MemberDTO> result = new ArrayList<MemberDTO>();
+		
+		try
+		{
+			Statement stmt = conn.createStatement();
+			
+			// 직원 전체 출력 쿼리문
+			String sql = "SELECT E.EMP_ID, E.EMP_NAME, E.SSN, E.IBSADATE, C.CITY_NAME, E.TEL, B.BUSEO_NAME, J.JIKWI_NAME"
+					+ ", E.BASICPAY, NVL(E.SUDANG, 0), (E.BASICPAY + NVL(E.SUDANG, 0))"
+					+ " FROM TBL_EMP E"
+					+ " LEFT JOIN TBL_CITY C ON E.CITY_ID = C.CITY_ID"
+					+ " LEFT JOIN TBL_BUSEO B ON E.BUSEO_ID = B.BUSEO_ID"
+					+ " LEFT JOIN TBL_JIKWI J ON E.JIKWI_ID = J.JIKWI_ID";
+			
+			// 정렬 유형 → 1:사번, 2:이름, 3:부서, 4:직위, 5:급여 내림차순
+			switch (n)
+			{
+				case 1: sql += " ORDER BY 1"; break;
+				case 2: sql += " ORDER BY 2"; break;
+				case 3: sql += " ORDER BY 7"; break;
+				case 4: sql += " ORDER BY 8"; break;
+				case 5: sql += " ORDER BY 11 DESC"; break;			
+			}
+			
+			// 작업객체를 통해 쿼리문 실행
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while (rs.next())
+			{
+				MemberDTO dto = new MemberDTO();
+				
+				dto.setEmpId(rs.getInt(1));
+				dto.setEmpName(rs.getString(2));
+				dto.setSsn(rs.getString(3));
+				dto.setIbsadate(rs.getString(4));
+				dto.setCityName(rs.getString(5));
+				dto.setTel(rs.getString(6));
+				dto.setBuseoName(rs.getString(7));
+				dto.setJikwiName(rs.getString(8));
+				dto.setBasicPay(rs.getInt(9));
+				dto.setSudang(rs.getInt(10));
+				dto.setPay(rs.getInt(11));
+				
+				result.add(dto);
+			}
+			
+			rs.close();
+			//stmt.close();
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+				
+		return result;
+	}
+	
+	
+	// 직원 검색 출력
+	public ArrayList<MemberDTO> members(int n, String s)
+	{
+		ArrayList<MemberDTO> result = new ArrayList<MemberDTO>();
+		
+		try
+		{
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT E.EMP_ID, E.EMP_NAME, E.SSN, E.IBSADATE, C.CITY_NAME, E.TEL, B.BUSEO_NAME, J.JIKWI_NAME"
+					+ ", E.BASICPAY, NVL(E.SUDANG, 0), (E.BASICPAY + NVL(E.SUDANG, 0))"
+					+ " FROM TBL_EMP E"
+					+ " LEFT JOIN TBL_CITY C ON E.CITY_ID = C.CITY_ID"
+					+ " LEFT JOIN TBL_BUSEO B ON E.BUSEO_ID = B.BUSEO_ID"
+					+ " LEFT JOIN TBL_JIKWI J ON E.JIKWI_ID = J.JIKWI_ID";
+			
+			// 검색 유형 → 1:사번, 2:이름, 3:부서, 4:직위
+			switch (n)
+			{
+				case 1: sql += String.format(" WHERE E.EMP_ID = %s", s); break;
+				case 2: sql += String.format(" WHERE E.EMP_NAME = '%s'", s); break;
+				case 3: sql += String.format(" WHERE B.BUSEO_NAME = %s", s); break;
+				case 4: sql += String.format(" WHERE J.JIKWI_NAME = %s", s); break;
+			}
+			
+			// 작업객체를 통해 쿼리문 실행
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while (rs.next())
+			{
+				MemberDTO dto = new MemberDTO();
+				
+				dto.setEmpId(rs.getInt(1));
+				dto.setEmpName(rs.getString(2));
+				dto.setSsn(rs.getString(3));
+				dto.setIbsadate(rs.getString(4));
+				dto.setCityName(rs.getString(5));
+				dto.setTel(rs.getString(6));
+				dto.setBuseoName(rs.getString(7));
+				dto.setJikwiName(rs.getString(8));
+				dto.setBasicPay(rs.getInt(9));
+				dto.setSudang(rs.getInt(10));
+				dto.setPay(rs.getInt(11));
+				
+				result.add(dto);
+			}
+			
+			rs.close();
+			//stmt.close();
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+
+		return result;
+	}
+	
+	
+	// 직원 정보 수정
+	public int modify(MemberDTO dto)
+	{
+		int result = 0;
+		
+		try
+		{
+			Statement stmt = conn.createStatement();
+			String sql = String.format("UPDATE TBL_EMP"
+					+ " SET EMP_NAME='%s', SSN='%s', IBSADATE='%s', CITY_ID=%d"
+					+ ", TEL='%s', BUSEO_ID=%d, JIKWI_ID=%d, BASICPAY=%d, SUDANG=%d"
+					+ " WHERE EMP_ID = %d"
+					, dto.getEmpName(), dto.getSsn(), dto.getIbsadate(), dto.getCityId()
+					, dto.getTel(), dto.getBuseoId(), dto.getJikwiId(), dto.getBasicPay(), dto.getSudang()
+					, dto.getEmpId());
+			result = stmt.executeUpdate(sql);
+			
+			//stmt.close();
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}
+	
+	
+	// 직원 정보 삭제
+	public int remove(int id)
+	{
+		int result = 0;
+		
+		try
+		{
+			Statement stmt = conn.createStatement();
+			String sql = String.format("DELETE FROM TBL_EMP WHERE EMP_ID = %d", id);
+			result = stmt.executeUpdate(sql);
+			
+			//stmt.close();
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}		
+		
+		return result;
+	}
+	
+	
+	// 데이터베이스 연결 종료
+	public void close() throws SQLException
+	{
+		conn.close();
+	}
+	
+}

@@ -1,0 +1,125 @@
+/*==============================================
+	MemverProcess.java
+	- 콘솔 기반 서브 메뉴 입출력 전용 클래스 
+==============================================*/
+
+package com.test;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class MemberProcess
+{
+	// 주요 속성 구성
+	private MemberDAO dao;
+		
+	// 생성자 정의
+	public MemberProcess()
+	{
+		dao = new MemberDAO();
+	}
+	
+	
+	// 직원 정보 입력 메소드 정의
+	public void memberInsert()
+	{
+		Scanner sc = new Scanner(System.in);
+		
+		try
+		{
+			// 데이터베이스 연결
+			dao.connection();
+			
+			// 지역 리스트 구성
+			ArrayList<String> citys = dao.searchCity();
+			StringBuilder cityStr = new StringBuilder();
+			for (String city : citys)
+				cityStr.append(city + "/");
+
+			// 부서 리스트 구성
+			ArrayList<String> buseos = dao.searchBuseo();
+			StringBuilder buseoStr = new StringBuilder();
+			for (String buseo : buseos)
+				buseoStr.append(buseo + "/");
+
+			// 직위 리스트 구성
+			ArrayList<String> jikwis = dao.searchJikwi();
+			StringBuilder jikwiStr = new StringBuilder();
+			for (String jikwi : jikwis)
+				jikwiStr.append(jikwi + "/");
+			
+			
+			// 사용자에게 안내 메시지 출력
+			
+		} catch (Exception e)
+		{
+			// TODO: handle exception
+		}
+		
+		
+			
+			
+		
+		// 사용자로부터 직원 정보 입력 받기	
+		System.out.println();
+		System.out.println("직원 정보 입력 ------------------------------------");
+		System.out.print("이름: ");
+		String empName = sc.next();
+		
+		System.out.print("주민등록번호(yymmdd-nnnnnnn): ");
+		String ssn = sc.next();
+		
+		System.out.print("입사일(yyyy-mm-dd): ");
+		String ibsadate = sc.next();
+		
+		System.out.print("지역(");
+		String cityName = sc.next();
+		
+		System.out.print("전화번호: ");
+		String tel = sc.next();
+		
+		System.out.print("부서(");
+		String buseoName = sc.next();		
+				
+		System.out.print("직위(");
+		String jikwiName = sc.next();
+		
+		System.out.print(String.format("기본급(최소 %,d원 이상): ", dao.minBasicPay(jikwiName)));
+		int basicPay = sc.nextInt();
+		
+		System.out.print("수당: ");
+		int sudang = sc.nextInt();
+		
+		System.out.println("");
+	}
+	
+	
+	// 직원 전체 출력 메소드 정의
+	public void memberLists()
+	{
+		
+	}
+	
+	
+	// 직원 검색 출력 메소드 정의
+	public void memberSearch()
+	{
+		
+	}
+	
+	
+	// 직원 정보 수정 메소드 정의
+	public void memberUpdate()
+	{
+		
+	}
+	
+	
+	// 직원 정보 삭제 메소드 정의
+	public void memberDelete()
+	{
+	
+	}
+	
+	
+}

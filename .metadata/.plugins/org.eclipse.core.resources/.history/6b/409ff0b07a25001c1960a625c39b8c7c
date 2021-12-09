@@ -1,0 +1,150 @@
+/*==============================================
+	MemverProcess.java
+	- 콘솔 기반 서브 메뉴 입출력 전용 클래스 
+==============================================*/
+
+package com.test;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class MemberProcess
+{
+	// 주요 속성 구성
+	private MemberDAO dao;
+		
+	// 생성자 정의
+	public MemberProcess()
+	{
+		dao = new MemberDAO();
+	}
+	
+	
+	// 직원 정보 입력 메소드 정의
+	public void memberInsert()
+	{
+		Scanner sc = new Scanner(System.in);
+		
+		try
+		{
+			// 데이터베이스 연결
+			dao.connection();
+			
+			// 지역 리스트 구성
+			ArrayList<String> citys = dao.searchCity();
+			StringBuilder cityStr = new StringBuilder();
+			for (String city : citys)
+				cityStr.append(city + "/");
+
+			// 부서 리스트 구성
+			ArrayList<String> buseos = dao.searchBuseo();
+			StringBuilder buseoStr = new StringBuilder();
+			for (String buseo : buseos)
+				buseoStr.append(buseo + "/");
+
+			// 직위 리스트 구성
+			ArrayList<String> jikwis = dao.searchJikwi();
+			StringBuilder jikwiStr = new StringBuilder();
+			for (String jikwi : jikwis)
+				jikwiStr.append(jikwi + "/");
+			
+			
+			// 사용자에게 안내 메시지 출력
+			System.out.println();
+			System.out.println("직원 정보 입력 ------------------------------------");
+			System.out.print("이름: ");
+			String empName = sc.next();
+			
+			System.out.print("주민등록번호(yymmdd-nnnnnnn): ");
+			String ssn = sc.next();
+			
+			System.out.print("입사일(yyyy-mm-dd): ");
+			String ibsaDate = sc.next();
+			
+			System.out.printf("지역(%s): ", cityStr.toString());		
+			String cityName = sc.next();
+			
+			System.out.print("전화번호: ");
+			String tel = sc.next();
+
+			System.out.printf("부서(%s): ", buseoStr.toString());
+			String buseoName = sc.next();		
+					
+			System.out.printf("직위(%s): ", jikwiStr.toString());
+			String jikwiName = sc.next();
+			
+			System.out.printf("기본급(최소 %,d원 이상): ", dao.searchBasicPay(jikwiName));
+			int basicPay = sc.nextInt();
+			
+			System.out.print("수당: ");
+			int sudang = sc.nextInt();
+			
+			
+			// MemberDTO 구성
+			MemberDTO dto = new MemberDTO();
+			dto.setEmpName(empName);
+			dto.setSsn(ssn);
+			dto.setIbsaDate(ibsaDate);
+			dto.setCityName(cityName);
+			dto.setTel(tel);
+			dto.setBuseoName(buseoName);
+			dto.setJikwiName(jikwiName);
+			dto.setBasicPay(basicPay);
+			dto.setSudang(sudang);
+			
+			int result = dao.add(dto);
+			if(result > 0)
+				System.out.println("직원 정보 입력 완료~!!!");
+			else 
+				System.out.println("ERROR: 직원정보 입력에 실패했습니다.");
+			
+			System.out.println("------------------------------------ 직원 정보 입력");
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		finally
+		{
+			try
+			{
+				dao.close();
+				
+			} catch (Exception e)
+			{
+				System.out.println(e.toString());
+			}
+		}
+				
+	}// end memberInsert()
+	
+	
+	// 직원 전체 출력 메소드 정의
+	public void memberLists()
+	{
+		
+	}
+	
+	
+	// 직원 검색 출력 메소드 정의
+	public void memberSearch()
+	{
+		
+	}
+	
+	
+	// 직원 정보 수정 메소드 정의
+	public void memberUpdate()
+	{
+		
+	}
+	
+	
+	// 직원 정보 삭제 메소드 정의
+	public void memberDelete()
+	{
+	
+	}
+	
+	
+}

@@ -1,0 +1,126 @@
+package com.test;
+
+public class MemberDTO
+{
+	private int empId, cityId, buseoId, jikwiId;
+	private int basicpay, sudang;
+	private String empName, ssn, tel;
+	private String ibsadate;
+	
+	private String cityName, buseoName, jikwiName;
+	private int pay;
+	
+	public int getEmpId()
+	{
+		return empId;
+	}
+	public void setEmpId(int empId)
+	{
+		this.empId = empId;
+	}
+	public int getCityId()
+	{
+		return cityId;
+	}
+	public void setCityId(int cityId)
+	{
+		this.cityId = cityId;
+	}
+	public int getBuseoId()
+	{
+		return buseoId;
+	}
+	public void setBuseoId(int buseoId)
+	{
+		this.buseoId = buseoId;
+	}
+	public int getJikwiId()
+	{
+		return jikwiId;
+	}
+	public void setJikwiId(int jikwiId)
+	{
+		this.jikwiId = jikwiId;
+	}
+	public int getBasicpay()
+	{
+		return basicpay;
+	}
+	public void setBasicpay(int basicpay)
+	{
+		this.basicpay = basicpay;
+	}
+	public int getSudang()
+	{
+		return sudang;
+	}
+	public void setSudang(int sudang)
+	{
+		this.sudang = sudang;
+	}
+	public String getEmpName()
+	{
+		return empName;
+	}
+	public void setEmpName(String empName)
+	{
+		this.empName = empName;
+	}
+	public String getSsn()
+	{
+		return ssn;
+	}
+	public void setSsn(String ssn)
+	{
+		this.ssn = ssn;
+	}
+	public String getTel()
+	{
+		return tel;
+	}
+	public void setTel(String tel)
+	{
+		this.tel = tel;
+	}
+	public String getIbsadate()
+	{
+		return ibsadate;
+	}
+	public void setIbsadate(String ibsadate)
+	{
+		this.ibsadate = ibsadate;
+	}
+	public String getCityName()
+	{
+		return cityName;
+	}
+	public void setCityName(String cityName)
+	{
+		this.cityName = cityName;
+	}
+	public String getBuseoName()
+	{
+		return buseoName;
+	}
+	public void setBuseoName(String buseoName)
+	{
+		this.buseoName = buseoName;
+	}
+	public String getJikwiName()
+	{
+		return jikwiName;
+	}
+	public void setJikwiName(String jikwiName)
+	{
+		this.jikwiName = jikwiName;
+	}
+	public int getPay()
+	{
+		return pay;
+	}
+	public void setPay(int pay)
+	{
+		this.pay = pay;
+	}	
+	
+}

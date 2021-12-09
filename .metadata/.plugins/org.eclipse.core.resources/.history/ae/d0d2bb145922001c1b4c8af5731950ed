@@ -1,0 +1,205 @@
+package com.test;
+
+import java.sql.SQLException;
+import java.util.Scanner;
+
+public class MemberProcess
+{
+	MemberDAO dao = new MemberDAO();
+	
+	
+	public void menuDisp()
+	{
+		System.out.println();
+		System.out.println("=======[ 직원 관리 ]=======");
+		System.out.println("1. 직원 정보 입력");
+		System.out.println("2. 직원 전체 출력");
+		System.out.println("	- 사번 정렬");
+		System.out.println("	- 이름 정렬");
+		System.out.println("	- 부서 정렬");
+		System.out.println("	- 직위 정렬");
+		System.out.println("	- 급여 내림차순 정렬");
+		System.out.println("3. 직원 검색 출력");
+		System.out.println("	- 사번 검색");
+		System.out.println("	- 이름 검색");
+		System.out.println("	- 부서 검색");
+		System.out.println("	- 직위 검색");
+		System.out.println("4. 직원 정보 수정");
+		System.out.println("5. 직원 정보 삭제");
+		System.out.println("===========================");
+	}
+	
+	
+	public int menuSel()
+	{
+		Scanner sc = new Scanner(System.in);
+		System.out.print(">> 메뉴 선택(1~5, -1 종료): ");
+		
+		return sc.nextInt();
+	}
+	
+	
+	public void menuRun(int i) throws SQLException 
+	{
+		switch (i)
+		{
+			case  1: memberInsert(); break;
+			case  2: break;
+			case  3: break;
+			case  4: break;
+			case  5: break;
+			case -1: System.out.println("프로그램을 종료합니다.");
+					 System.exit(-1);
+		}		
+	}
+	
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	
+	// 1. 직원 정보 입력
+	public void memberInsert() throws SQLException
+	{
+		// 데이터베이스 연결
+		dao.connection();		
+		
+		// 인스턴스 생성
+		MemberDTO dto = new MemberDTO();
+		Scanner sc = new Scanner(System.in);
+		
+		
+		// 사용자로부터 직원 정보 입력 받기	
+		System.out.println();
+		System.out.println("직원 정보 입력 ------------------------------------");
+		System.out.print("이름: ");
+		String name = sc.next();
+		
+		System.out.print("주민등록번호(yymmdd-nnnnnnn): ");
+		String ssn = sc.next();
+		
+		System.out.print("입사일(yyyy-mm-dd): ");
+		String ibsadate = sc.next();
+		
+		System.out.print("지역(");
+		for (String str : dao.cityLists())
+			System.out.print(str + "/");			
+		System.out.print("): ");		
+		String cityName = sc.next();
+		
+		System.out.print("전화번호: ");
+		String tel = sc.next();
+		
+		System.out.print("부서(");
+		for (String str : dao.buseoLists())
+			System.out.print(str + "/");
+		System.out.print("/): ");
+		String buseoName = sc.next();		
+				
+		System.out.print("직위(");
+		for (String str : dao.jikwiLists())
+			System.out.print(str + "/");
+		System.out.print("): ");
+		String jikwiName = sc.next();
+		
+		System.out.print(String.format("기본급(최소 %,d원 이상): ", dao.minBasicPay(jikwiName)));
+		int basicPay = sc.nextInt();
+		
+		System.out.print("수당: ");
+		int sudang = sc.nextInt();
+		
+		System.out.println("");
+
+		
+		// 입력받은 자료 유효성 검사(주민등록번호, 기본급, 입사일)
+		if (!checkSsn(ssn))
+		{
+			System.out.println("ERROR: 입력한 주민등록번호가 유효하지 않습니다.");
+			System.out.println("ERROR: 직원정보 입력에 실패했습니다.");
+			
+			dao.close();
+			return;
+		}
+		
+		if (basicPay < dao.minBasicPay(jikwiName))
+		{
+			System.out.println("ERROR: 최소 기본급이 충족되지 않습니다.");
+			System.out.println("ERROR: 직원정보 입력에 실패했습니다.");
+			
+			dao.close();
+			return;
+		}
+		
+				
+		// 입력받은 자료 변환(Name → Id / 지역, 부서, 직위)
+		
+		
+		
+		// MemberDTO 객체 구성
+		
+		
+		
+		// dao 의 add() 메소드 호출
+		int result = dao.add(dto);
+		
+		if (result > 0)		
+			System.out.println("직원 정보 입력을 완료했습니다.");
+		else 
+			System.out.println("ERROR: 직원정보 입력에 실패했습니다.");
+		
+		System.out.println("------------------------------------ 직원 정보 입력");
+		
+		dao.close();
+	}
+	
+	
+	// 주민등록번호 유효성 검사
+	private static boolean checkSsn(String str)
+	{
+		// 주요 변수 선언
+		int[] chk = {2, 3, 4, 5, 6, 7, 0, 8, 9, 2, 3, 4, 5};	// 곱해지는 수		
+		int tot = 0;			// 곱셈 연산 후 누적합을 담을 변수
+		int su;					// 최종 연산 결과가 담을 변수
+		
+		// ① 입력된 주민등록번호 자릿수 확인
+		if (str.length() != 14)
+			return false;
+
+		// ②유효성 검사
+		for (int i=0; i<13; i++)
+		{
+			if (i==6)	// 7번째 자리("-")는 연산 생략
+				continue;
+			tot += chk[i] * Integer.parseInt(str.substring(i, i+1));
+		}
+
+		su = 11 - tot % 11;
+		su = su % 10;
+		// --==>> 최종 연산 결과는 변수 su 에 담긴 상황이다.
+
+		// 결과 반환
+		if (su==Integer.parseInt(str.substring(13)))
+			return true;
+		else
+			return false;
+	}
+	
+	
+	
+//	1. 직원 정보 입력
+//	2. 직원 전체 출력
+//		- 사번 정렬
+//		- 이름 정렬
+//		- 부서 정렬
+//		- 직위 정렬
+//		- 급여 내림차순 정렬
+//	3. 직원 검색 출력
+//		- 사번 검색
+//		- 이름 검색
+//		- 부서 검색
+//		- 직위 검색
+//	4. 직원 정보 수정
+//	5. 직원 정보 삭제
+	
+	
+
+}

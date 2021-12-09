@@ -1,0 +1,6 @@
+#Tue Sep 28 16:38:20 KST 2021
+__DEFAULT__=false
+org.eclipse.sdk.Eclipse.master=true
+org.eclipse.sdk.Google.master=true
+org.eclipse.help.ui.localSearch.master=true
+expression=create getter

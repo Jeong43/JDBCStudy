@@ -1,0 +1,38 @@
+package com.test;
+
+import java.sql.Connection;
+import java.sql.Statement;
+
+import com.util.DBConn;
+
+public class Test001
+{
+	public static void main(String[] args)
+	{
+		try
+		{
+			Connection conn = DBConn.getConnection();
+			
+			if (conn != null)
+			{
+				Statement stmt = conn.createStatement();
+				String sql = "INSERT INTO TBL_MEMBER(SID, NAME, TEL)" 
+							+ " VALUES(MEMBERSEQ.NEXTVAL, '정효진', '010-6666-6666')";
+				
+				int result = stmt.executeUpdate(sql);
+				
+				if (result > 0)
+					System.out.println("데이터 입력 성공~!!!");
+				
+				stmt.close();
+				DBConn.close();		
+							
+				
+			}
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+}
